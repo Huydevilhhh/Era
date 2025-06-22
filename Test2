@@ -15,7 +15,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("Bu
 wait(1.2)
 local player = game.Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
-local itemName = "Common Egg x2"
+local itemName = "Common Egg x1"
 
 -- Hàm lấy nhân vật
 local function getCharacter()
