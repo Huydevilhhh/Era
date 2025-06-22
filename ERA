@@ -107,4 +107,4 @@ end
 
 -- ❌ Thoát game sau khi hoàn tất
 print("❌ Đã hoàn tất. Đang thoát game...")
-player:Kick("Đã hoàn tất nhiệm vụ tự động."
+player:Kick("Đã hoàn tất nhiệm vụ tự động.")
