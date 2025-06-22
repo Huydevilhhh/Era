@@ -1,0 +1,80 @@
+local VirtualInput = game:GetService("VirtualInputManager")
+
+-- Xóa GUI cũ nếu có
+pcall(function()
+	if game.CoreGui:FindFirstChild("SimpleAutoClickGUI") then
+		game.CoreGui:FindFirstChild("SimpleAutoClickGUI"):Destroy()
+	end
+end)
+
+-- Tạo GUI
+local gui = Instance.new("ScreenGui", game.CoreGui)
+gui.Name = "SimpleAutoClickGUI"
+gui.ResetOnSpawn = false
+
+-- Dấu định vị click
+local marker = Instance.new("Frame", gui)
+marker.Size = UDim2.new(0, 20, 0, 20)
+marker.Position = UDim2.new(0, 300, 0, 300)
+marker.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+marker.BorderSizePixel = 0
+marker.BackgroundTransparency = 0.3
+marker.Active = true
+marker.Draggable = true
+
+-- Nút bật tắt
+local toggle = Instance.new("TextButton", gui)
+toggle.Size = UDim2.new(0, 140, 0, 40)
+toggle.Position = UDim2.new(0, 20, 0, 100)
+toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggle.Font = Enum.Font.SourceSansBold
+toggle.TextSize = 18
+toggle.Text = "🔴 Auto Click: OFF"
+toggle.Active = true
+
+-- Delay Box
+local delayBox = Instance.new("TextBox", gui)
+delayBox.Size = UDim2.new(0, 140, 0, 30)
+delayBox.Position = UDim2.new(0, 20, 0, 150)
+delayBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+delayBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+delayBox.Font = Enum.Font.SourceSans
+delayBox.TextSize = 18
+delayBox.PlaceholderText = "Delay (ex: 0.1)"
+delayBox.Text = "0.1"
+
+-- Trạng thái
+local autoClick = false
+local delay = 0.1
+
+-- Xử lý nhập delay
+delayBox.FocusLost:Connect(function()
+	local val = tonumber(delayBox.Text)
+	if val and val >= 0.01 then
+		delay = val
+	else
+		delayBox.Text = tostring(delay)
+	end
+end)
+
+-- Toggle auto click
+toggle.MouseButton1Click:Connect(function()
+	autoClick = not autoClick
+	toggle.Text = autoClick and "🟢 Auto Click: ON" or "🔴 Auto Click: OFF"
+end)
+
+-- Vòng lặp auto click
+task.spawn(function()
+	while true do
+		if autoClick then
+			local x = marker.AbsolutePosition.X + marker.AbsoluteSize.X / 2
+			local y = marker.AbsolutePosition.Y + marker.AbsoluteSize.Y / 2
+			VirtualInput:SendMouseButtonEvent(x, y, 0, true, game, 0)
+			VirtualInput:SendMouseButtonEvent(x, y, 0, false, game, 0)
+			task.wait(delay)
+		else
+			task.wait(0.1)
+		end
+	end
+end)
