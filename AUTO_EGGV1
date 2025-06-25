@@ -44,3 +44,115 @@ if player.Character then
     wait(1)
     equipItem()
 end
+wait(0.3)
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Danh sách các từ khoá GUI có thể là màn hình chờ
+local blacklist = { "Loading", "Intro", "Welcome", "StartScreen", "Tutorial", "MainUI" }
+
+-- Hàm kiểm tra và xoá các GUI có tên giống từ khoá
+local function removeIntroGUIs()
+    for _, gui in pairs(playerGui:GetChildren()) do
+        for _, keyword in pairs(blacklist) do
+            if gui.Name:lower():find(keyword:lower()) then
+                gui:Destroy()
+                print("🚫 Đã xoá GUI:", gui.Name)
+            end
+        end
+    end
+end
+
+-- Gọi lúc đầu
+removeIntroGUIs()
+
+-- Gọi khi có GUI mới được tạo
+playerGui.ChildAdded:Connect(function(child)
+    wait(0.1)
+    removeIntroGUIs()
+end)
+Wait()
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Chờ nhân vật xuất hiện
+local function resetCamera()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    local camera = workspace.CurrentCamera
+
+    -- Đặt camera về chế độ mặc định theo nhân vật
+    camera.CameraSubject = humanoid
+    camera.CameraType = Enum.CameraType.Custom
+
+    print("🎥 Camera đã được reset về mặc định.")
+end
+
+-- Gọi sau khi vào game hoặc sau khi thoát GUI
+task.delay(1, resetCamera)
+
+-- Gọi lại mỗi lần nhân vật load mới
+player.CharacterAdded:Connect(function()
+    task.wait(1)
+    resetCamera()
+end)
+wait(0.7)
+local Players = game:GetService("Players")
+local VirtualInput = game:GetService("VirtualInputManager")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- 🚶 Tiến thẳng 30 studs
+local forward = hrp.CFrame.LookVector
+hrp.CFrame = hrp.CFrame + (forward * 30)
+task.wait(0.2)
+
+-- ↩️ Quẹo trái 22 studs
+local left = -hrp.CFrame.RightVector
+hrp.CFrame = hrp.CFrame + (left * 22)
+task.wait(0.3)
+
+-- 🖱️ Click 10 lần dưới chân
+local function clickBelowFeet(times)
+    local camera = workspace.CurrentCamera
+    local footPos = hrp.Position - Vector3.new(0, 2, 0)
+    local screenPos, onScreen = camera:WorldToViewportPoint(footPos)
+
+    if onScreen then
+        for i = 1, times do
+            VirtualInput:SendMouseButtonEvent(screenPos.X, screenPos.Y, 0, true, game, 0)
+            VirtualInput:SendMouseButtonEvent(screenPos.X, screenPos.Y, 0, false, game, 0)
+            task.wait(0.1)
+        end
+    else
+        warn("⚠️ Không thể click dưới chân: vị trí ngoài màn hình.")
+    end
+end
+
+clickBelowFeet(10)
+
+-- 🏅 Hiện badge "✅ Complete the mission"
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "CompletionBadge"
+gui.ResetOnSpawn = false
+
+local label = Instance.new("TextLabel", gui)
+label.Size = UDim2.new(0, 240, 0, 40)
+label.Position = UDim2.new(1, -250, 1, -60) -- Góc phải dưới
+label.BackgroundColor3 = Color3.fromRGB(30, 180, 80)
+label.TextColor3 = Color3.new(1, 1, 1)
+label.Font = Enum.Font.SourceSansBold
+label.TextSize = 20
+label.Text = "✅ Complete the mission"
+label.BackgroundTransparency = 0.1
+label.BorderSizePixel = 0
+label.TextStrokeTransparency = 0.5
+label.AnchorPoint = Vector2.new(0, 0)
+
+-- Tuỳ chọn: Tự động biến mất sau 5 giây
+task.delay(5, function()
+    gui:Destroy()
+end)
+
+print("✅ Mission completed successfully.")
