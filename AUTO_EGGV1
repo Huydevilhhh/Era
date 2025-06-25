@@ -103,43 +103,65 @@ local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local hrp = character:WaitForChild("HumanoidRootPart")
 
--- 🚶 Tiến thẳng 30 studs
+-- Hàm click dưới chân
+local function clickBelowFeet(times)
+	local camera = workspace.CurrentCamera
+	local footPos = hrp.Position - Vector3.new(0, 2, 0)
+	local screenPos, onScreen = camera:WorldToViewportPoint(footPos)
+
+	if onScreen then
+		for i = 1, times do
+			VirtualInput:SendMouseButtonEvent(screenPos.X, screenPos.Y, 0, true, game, 0)
+			VirtualInput:SendMouseButtonEvent(screenPos.X, screenPos.Y, 0, false, game, 0)
+			task.wait(0.1)
+		end
+	else
+		warn("⚠️ Không thể click dưới chân: vị trí ngoài màn hình.")
+	end
+end
+
+-- Bắt đầu hành động
 local forward = hrp.CFrame.LookVector
+local left = -hrp.CFrame.RightVector
+local right = hrp.CFrame.RightVector
+
+-- 🚶 Tiến thẳng 30 studs
 hrp.CFrame = hrp.CFrame + (forward * 30)
 task.wait(0.2)
 
 -- ↩️ Quẹo trái 22 studs
-local left = -hrp.CFrame.RightVector
 hrp.CFrame = hrp.CFrame + (left * 22)
 task.wait(0.3)
 
 -- 🖱️ Click 10 lần dưới chân
-local function clickBelowFeet(times)
-    local camera = workspace.CurrentCamera
-    local footPos = hrp.Position - Vector3.new(0, 2, 0)
-    local screenPos, onScreen = camera:WorldToViewportPoint(footPos)
+clickBelowFeet(10)
+task.wait(0.3)
 
-    if onScreen then
-        for i = 1, times do
-            VirtualInput:SendMouseButtonEvent(screenPos.X, screenPos.Y, 0, true, game, 0)
-            VirtualInput:SendMouseButtonEvent(screenPos.X, screenPos.Y, 0, false, game, 0)
-            task.wait(0.1)
-        end
-    else
-        warn("⚠️ Không thể click dưới chân: vị trí ngoài màn hình.")
-    end
-end
+-- 🚶 Tiến tiếp 7 studs (cập nhật forward sau quẹo)
+forward = hrp.CFrame.LookVector
+hrp.CFrame = hrp.CFrame + (forward * 7)
+task.wait(0.3)
 
+-- 🖱️ Click 10 lần
+clickBelowFeet(10)
+task.wait(0.3)
+
+-- ↪️ Quẹo phải 7 studs (cập nhật right theo hướng mới)
+right = hrp.CFrame.RightVector
+hrp.CFrame = hrp.CFrame + (right * 7)
+task.wait(0.3)
+
+-- 🖱️ Click 10 lần
 clickBelowFeet(10)
 
--- 🏅 Hiện badge "✅ Complete the mission"
+-- 🏅 Hiện badge "Complete the mission"
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "CompletionBadge"
 gui.ResetOnSpawn = false
 
 local label = Instance.new("TextLabel", gui)
 label.Size = UDim2.new(0, 240, 0, 40)
-label.Position = UDim2.new(1, -250, 1, -60) -- Góc phải dưới
+label.Position = UDim2.new(1, -250, 1, -60)
 label.BackgroundColor3 = Color3.fromRGB(30, 180, 80)
 label.TextColor3 = Color3.new(1, 1, 1)
 label.Font = Enum.Font.SourceSansBold
@@ -148,11 +170,10 @@ label.Text = "✅ Complete the mission"
 label.BackgroundTransparency = 0.1
 label.BorderSizePixel = 0
 label.TextStrokeTransparency = 0.5
-label.AnchorPoint = Vector2.new(0, 0)
 
--- Tuỳ chọn: Tự động biến mất sau 5 giây
+-- 🕐 Tự động xoá sau 5 giây
 task.delay(5, function()
-    gui:Destroy()
+	gui:Destroy()
 end)
 
-print("✅ Mission completed successfully.")
+print("✅ Nhiệm vụ hoàn thành.")
