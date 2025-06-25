@@ -12,7 +12,7 @@ local args = {
 	3
 }
 game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("BuyPetEgg"):FireServer(unpack(args))
-wait(1.2)
+wait(0.3)
 local itemName = "Paradise Egg x1" -- Tên chính xác của món đồ
 
 local player = game.Players.LocalPlayer
