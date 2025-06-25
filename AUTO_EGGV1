@@ -171,8 +171,8 @@ label.BackgroundTransparency = 0.1
 label.BorderSizePixel = 0
 label.TextStrokeTransparency = 0.5
 
--- 🕐 Tự động xoá sau 5 giây
-task.delay(5, function()
+-- 🕐 Tự động xoá sau 2 giây
+task.delay(2, function()
 	gui:Destroy()
 wait()
 local player = game.Players.LocalPlayer
