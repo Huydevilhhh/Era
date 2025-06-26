@@ -71,7 +71,8 @@ playerGui.ChildAdded:Connect(function(child)
     wait(0.1)
     removeIntroGUIs()
 end)
-Wait()
+
+wait()
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
@@ -96,6 +97,7 @@ player.CharacterAdded:Connect(function()
     task.wait(1)
     resetCamera()
 end)
+
 wait(1.5)
 local Players = game:GetService("Players")
 local VirtualInput = game:GetService("VirtualInputManager")
@@ -133,8 +135,8 @@ task.wait(0.2)
 hrp.CFrame = hrp.CFrame + (left * 22)
 task.wait(0.3)
 
--- 🖱️ Click 10 lần dưới chân
-clickBelowFeet(10)
+-- 🖱️ Click 5 lần dưới chân
+clickBelowFeet(5)
 task.wait(0.3)
 
 -- 🚶 Tiến tiếp 7 studs (cập nhật forward sau quẹo)
@@ -142,8 +144,8 @@ forward = hrp.CFrame.LookVector
 hrp.CFrame = hrp.CFrame + (forward * 7)
 task.wait(0.3)
 
--- 🖱️ Click 10 lần
-clickBelowFeet(10)
+-- 🖱️ Click 5 lần
+clickBelowFeet(5)
 task.wait(0.3)
 
 -- ↪️ Quẹo phải 7 studs (cập nhật right theo hướng mới)
@@ -151,8 +153,8 @@ right = hrp.CFrame.RightVector
 hrp.CFrame = hrp.CFrame + (right * 7)
 task.wait(0.3)
 
--- 🖱️ Click 10 lần
-clickBelowFeet(10)
+-- 🖱️ Click 5 lần
+clickBelowFeet(5)
 
 -- 🏅 Hiện badge "Complete the mission"
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
@@ -171,12 +173,12 @@ label.BackgroundTransparency = 0.1
 label.BorderSizePixel = 0
 label.TextStrokeTransparency = 0.5
 
--- 🕐 Tự động xoá sau 1.5 giây
-task.delay(1.5, function()
+-- 🕐 Tự động xoá sau 1 giây và kick
+task.delay(1, function()
 	gui:Destroy()
-wait()
-local player = game.Players.LocalPlayer
-player:Kick("em TÚ zú bự đã kick bạn")
+	wait()
+	local player = game.Players.LocalPlayer
+	player:Kick("em TÚ zú bự đã kick bạn")
 end)
 
 print("✅ Nhiệm vụ hoàn thành.")
