@@ -1,0 +1,26 @@
+local args = {
+	{
+		Type = "Code",
+		Mode = "Redeem",
+		Code = "ONEEIGHTYFIVELIKES"
+	}
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args))
+wait(0.5)
+local args = {
+	{
+		Type = "Code",
+		Mode = "Redeem",
+		Code = "FORTYFIVELIKES"
+	}
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args))
+wait(0.5
+local args = {
+	{
+		Type = "Code",
+		Mode = "Redeem",
+		Code = "AFIRSTTIME3001"
+	}
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("GetFunction"):InvokeServer(unpack(args))
