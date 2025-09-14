@@ -27,7 +27,7 @@ button.Text = "Bật Script"
 local function runScript()
     -- Reset
     player.Character:BreakJoints()
-    task.wait(2.3)
+    task.wait(3)
 
     -- FireServer
     local args = { "3310460039_Medium_1", 2 }
