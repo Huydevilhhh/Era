@@ -33,7 +33,7 @@ local function runScript()
     local args = { "3310460039_Medium_1", 2 }
     game:GetService("ReplicatedStorage"):WaitForChild("PlatformEventEvents"):WaitForChild("PlayButtonClicked"):FireServer(unpack(args))
 
-    task.wait(2)
+    task.wait(3)
 
     -- Teleport
     local tx, ty, tz = -499.53, 43.44, 29.22
