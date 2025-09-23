@@ -1,3 +1,101 @@
+--Anti AFK Script (GUI xanh lá mini + viền xanh đậm)
+wait(0.5)
+local ba = Instance.new("ScreenGui")
+local ca = Instance.new("TextLabel")
+local da = Instance.new("Frame")
+local _b = Instance.new("TextLabel")
+local ab = Instance.new("TextLabel")
+local closeBtn = Instance.new("TextButton")
+
+ba.Parent = game.CoreGui
+ba.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+-- Title
+ca.Parent = ba
+ca.Active = true
+ca.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+ca.BorderSizePixel = 2
+ca.BorderColor3 = Color3.fromRGB(0, 100, 0)
+ca.Draggable = true
+ca.Position = UDim2.new(0.7, 0, 0.1, 0)
+ca.Size = UDim2.new(0, 180, 0, 30) -- nhỏ hơn
+ca.Font = Enum.Font.SourceSansSemibold
+ca.Text = "Anti AFK"
+ca.TextColor3 = Color3.new(1, 1, 1)
+ca.TextSize = 14
+
+-- Frame dưới
+da.Parent = ca
+da.BackgroundColor3 = Color3.fromRGB(0, 180, 0)
+da.BorderSizePixel = 2
+da.BorderColor3 = Color3.fromRGB(0, 100, 0)
+da.Position = UDim2.new(0, 0, 1.02, 0)
+da.Size = UDim2.new(0, 180, 0, 50) -- nhỏ gọn
+
+-- Text dưới
+_b.Parent = da
+_b.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+_b.BorderSizePixel = 2
+_b.BorderColor3 = Color3.fromRGB(0, 100, 0)
+_b.Position = UDim2.new(0, 0, 0.65, 0)
+_b.Size = UDim2.new(0, 180, 0, 15)
+_b.Font = Enum.Font.Arial
+_b.Text = "🌳🏡⛲🏝️🌱"
+_b.TextColor3 = Color3.new(1, 1, 1)
+_b.TextSize = 12
+
+-- Status
+ab.Parent = da
+ab.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+ab.BorderSizePixel = 2
+ab.BorderColor3 = Color3.fromRGB(0, 100, 0)
+ab.Position = UDim2.new(0, 0, 0.15, 0)
+ab.Size = UDim2.new(0, 180, 0, 20)
+ab.Font = Enum.Font.ArialBold
+ab.Text = "Status: Active"
+ab.TextColor3 = Color3.new(1, 1, 1)
+ab.TextSize = 12
+
+-- Nút ẩn/hiện
+closeBtn.Parent = ca
+closeBtn.Size = UDim2.new(0, 20, 0, 20)
+closeBtn.Position = UDim2.new(1, -25, 0, 5)
+closeBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+closeBtn.BorderSizePixel = 2
+closeBtn.BorderColor3 = Color3.fromRGB(0, 100, 0)
+closeBtn.TextColor3 = Color3.new(1, 1, 1)
+closeBtn.Font = Enum.Font.SourceSansBold
+closeBtn.TextSize = 12
+closeBtn.Text = "X"
+
+local hidden = false
+closeBtn.MouseButton1Click:Connect(function()
+    hidden = not hidden
+    if hidden then
+        da.Visible = false
+        _b.Visible = false
+        ab.Visible = false
+        closeBtn.Text = "O"
+        closeBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
+    else
+        da.Visible = true
+        _b.Visible = true
+        ab.Visible = true
+        closeBtn.Text = "X"
+        closeBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+    end
+end)
+
+-- Anti AFK logic
+local bb = game:service'VirtualUser'
+game:service'Players'.LocalPlayer.Idled:connect(function()
+    bb:CaptureController()
+    bb:ClickButton2(Vector2.new())
+    ab.Text = "Roblox tried to kick u but i kicked him instead"
+    wait(2)
+    ab.Text = "Status: Active"
+end)
+wait(1)
 -- Gui On/Off cho script auto seed + water
 -- Có thể kéo thả và nhỏ gọn hơn
 -- Sử dụng Delta Executor
