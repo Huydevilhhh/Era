@@ -1,0 +1,123 @@
+-- Gui On/Off cho script auto seed + water
+-- Có thể kéo thả và nhỏ gọn hơn
+-- Sử dụng Delta Executor
+
+-- Tạo GUI
+local ScreenGui = Instance.new("ScreenGui")
+local ToggleButton = Instance.new("TextButton")
+
+ScreenGui.Parent = game.CoreGui
+
+ToggleButton.Parent = ScreenGui
+ToggleButton.Size = UDim2.new(0, 120, 0, 40) -- nhỏ hơn
+ToggleButton.Position = UDim2.new(0.5, -60, 0.1, 0)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.Font = Enum.Font.SourceSansBold
+ToggleButton.TextSize = 18
+ToggleButton.Text = "Auto Buy: OFF"
+
+-- Biến bật/tắt
+local running = false
+
+-- Script chính đưa vào hàm
+local function autoFarm()
+    while running do
+        -- Dragon Fruit
+        local args = {{"Dragon Fruit Seed","\a"}}
+        game:GetService("ReplicatedStorage").BridgeNet2.dataRemoteEvent:FireServer(unpack(args))
+        wait(1)
+
+        -- Eggplant
+        args = {{"Eggplant Seed","\a"}}
+        game:GetService("ReplicatedStorage").BridgeNet2.dataRemoteEvent:FireServer(unpack(args))
+        wait(1)
+
+        -- Watermelon
+        args = {{"Watermelon Seed","\a"}}
+        game:GetService("ReplicatedStorage").BridgeNet2.dataRemoteEvent:FireServer(unpack(args))
+        wait(1)
+
+        -- Cocotank
+        args = {{"Cocotank Seed","\a"}}
+        game:GetService("ReplicatedStorage").BridgeNet2.dataRemoteEvent:FireServer(unpack(args))
+        wait(1)
+
+        -- Carnivorous
+        args = {{"Carnivorous Plant Seed","\a"}}
+        game:GetService("ReplicatedStorage").BridgeNet2.dataRemoteEvent:FireServer(unpack(args))
+        wait(1)
+
+        -- Mr Carrot
+        args = {{"Mr Carrot Seed","\a"}}
+        game:GetService("ReplicatedStorage").BridgeNet2.dataRemoteEvent:FireServer(unpack(args))
+        wait(1)
+
+        -- Tomatrio
+        args = {{"Tomatrio Seed","\a"}}
+        game:GetService("ReplicatedStorage").BridgeNet2.dataRemoteEvent:FireServer(unpack(args))
+        wait(1)
+
+        -- Water x3
+        for i = 1,3 do
+            args = {{"Water Bucket"," "}}
+            game:GetService("ReplicatedStorage").BridgeNet2.dataRemoteEvent:FireServer(unpack(args))
+            wait(1)
+        end
+
+        wait(5)
+    end
+end
+
+-- Toggle khi nhấn nút
+ToggleButton.MouseButton1Click:Connect(function()
+    running = not running
+    if running then
+        ToggleButton.Text = "Auto Buy: ON"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+        spawn(autoFarm) -- chạy script auto
+    else
+        ToggleButton.Text = "Auto Buy: OFF"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+    end
+end)
+
+-- Thêm chức năng kéo thả GUI
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local UserInputService = game:GetService("UserInputService")
+
+ToggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or 
+       input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = ToggleButton.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+ToggleButton.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or 
+       input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        ToggleButton.Position = UDim2.new(
+            startPos.X.Scale, startPos.X.Offset + delta.X,
+            startPos.Y.Scale, startPos.Y.Offset + delta.Y
+        )
+    end
+end)
